@@ -1,0 +1,12 @@
+{
+  "name": "sales-performance-dashboard",
+  "version": "1.0.0",
+  "description": "Sales performance dashboard import helper",
+  "main": "import_data.js",
+  "scripts": {
+    "import-data": "node import_data.js"
+  },
+  "dependencies": {
+    "mysql2": "^3.4.0"
+  }
+}
