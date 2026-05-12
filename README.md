@@ -1,128 +1,250 @@
-# Sales Performance Dashboard
+# 📊 Sales Performance Dashboard | SQL + MySQL + Tableau
 
-Portfolio project using Python, MySQL, SQL, and Power BI to analyze the Sample Superstore dataset.
+An interactive Business Intelligence dashboard built using **Tableau, MySQL, SQL, Python, and Node.js** to analyze sales performance, profitability, customer behavior, and regional trends using the Sample Superstore dataset.
 
-## Folder Structure
+This project demonstrates a complete end-to-end Data Analytics workflow — from raw data cleaning to SQL analysis and interactive dashboard visualization.
 
-```text
-dataset/
-  raw/                 Original Sample Superstore file
-  cleaned/             Cleaned CSV used for MySQL import
-notebooks/             Python cleaning and exploratory analysis
-sql/                   MySQL database, import, KPI, and analysis scripts
-dashboard/             Power BI dashboard files
-images/                Dashboard screenshots and project visuals
+---
+
+# 🚀 Live Dashboard
+
+🔗 Tableau Public Dashboard
+https://public.tableau.com/app/profile/venkatesh.kothamasu/viz/sales_17785529348890/Dashboard1?publish=yes
+
+---
+
+# 📌 Project Overview
+
+The goal of this project is to transform raw retail sales data into actionable business insights through:
+
+* Data Cleaning
+* SQL-based Analysis
+* KPI Tracking
+* Executive Dashboard Design
+* Interactive Visual Analytics
+
+The dashboard helps business users monitor:
+
+* Revenue growth
+* Profitability
+* Product performance
+* Regional sales
+* Customer segments
+* Discount impact
+
+---
+
+# 🛠️ Tech Stack
+
+| Technology      | Purpose                     |
+| --------------- | --------------------------- |
+| Tableau         | Dashboard Development       |
+| MySQL           | Database Management         |
+| SQL             | Data Analysis & KPI Queries |
+| Python (Pandas) | Data Cleaning               |
+| Node.js         | CSV Import Automation       |
+| VS Code         | Development Environment     |
+
+---
+
+# 📂 Project Structure
+
+```text id="r1"
+sales_performance_dashboard/
+│
+├── dataset/
+│   ├── raw/
+│   └── cleaned/
+│
+├── notebooks/
+│   └── data_cleaning.ipynb
+│
+├── sql/
+│   ├── create_table.sql
+│   ├── import_data.sql
+│   ├── kpi_queries.sql
+│   ├── sales_analysis.sql
+│   ├── customer_analysis.sql
+│   ├── profitability_analysis.sql
+│   └── advanced_queries.sql
+│
+├── tableau/
+│   └── Sales_analysis.twbx
+│
+├── images/
+│   └── dashboard_preview.png
+│
+├── import_data.js
+└── README.md
 ```
 
-## SQL Workflow
+---
 
-Run the SQL scripts in this order:
+# 📊 Dashboard Features
 
-1. `sql/create_table.sql` creates the `sales_performance_dashboard` database, a resilient `superstore_stage` table, a typed `superstore` production table, constraints, generated columns, and indexes.
-2. `sql/import_data.sql` loads `dataset/cleaned/superstore_cleaned.csv` with `LOAD DATA LOCAL INFILE`, validates the staging data, and inserts clean rows into the production table.
-3. `sql/kpi_queries.sql` builds executive KPI outputs and the `vw_kpi_summary` Power BI view.
-4. `sql/sales_analysis.sql` analyzes monthly trends, running totals, category mix, seasonality, state performance, and regional performance.
-5. `sql/customer_analysis.sql` identifies top customers, segment performance, customer tenure, and revenue concentration.
-6. `sql/profitability_analysis.sql` detects loss-making products, discount impact, margin leakage, and product profitability segments.
-7. `sql/advanced_queries.sql` adds rolling trends, year-over-year sales, ABC product classification, rank gaps, and shipping analysis.
+## Executive KPI Cards
 
-For CSV import, SQLTools may require local infile support in the MySQL connection. If `LOAD DATA LOCAL INFILE` is blocked, check `SHOW VARIABLES LIKE 'local_infile';` and enable local infile in the client connection.
+* 💰 Total Sales
+* 📈 Total Profit
+* 🛒 Total Orders
+* 📊 Profit Margin %
 
-A runnable helper script is included at `import_data.js` and works with mysql2 v2.0+ by using `localInfile: true` and `streamFactory`.
+## Interactive Filters
 
-Install dependencies and run the import with:
+* Region
+* Category
+* Segment
+* Order Year
 
-```bash
-npm install
-npm run import-data
+## Visual Analytics
+
+* Monthly Sales Trend
+* Sales by Category
+* Sales by Region
+* Top 10 Products
+* Profit by Region
+* Discount vs Profit Analysis
+
+---
+
+# 🗄️ Database Workflow
+
+## 1️⃣ Create Database & Tables
+
+Run:
+
+```sql id="r2"
+create_table.sql
 ```
 
-You can configure the database connection with environment variables:
+This script:
 
-- `DB_HOST`
-- `DB_PORT`
-- `DB_USER`
-- `DB_PASSWORD`
-- `DB_NAME`
+* Creates the MySQL database
+* Creates production & staging tables
+* Adds indexes and constraints
 
-If LOCAL INFILE is still unavailable, copy the CSV into the folder returned by `SHOW VARIABLES LIKE 'secure_file_priv';` and use the server-side `LOAD DATA INFILE` option in `sql/import_data.sql`.
+---
 
-## Database Design
+## 2️⃣ Import Cleaned Dataset
 
-The model uses one production fact table: `superstore`.
+Run:
 
-Grain: one row per order line item.
+```bash id="r3"
+node import_data.js
+```
 
-Key fields:
+This imports the cleaned CSV dataset into MySQL automatically.
 
-- Date fields: `order_date`, `ship_date`, `order_year`, `order_month_number`
-- Customer fields: `customer_id`, `customer_name`, `segment`
-- Product fields: `product_id`, `product_name`, `category`, `sub_category`
-- Geography fields: `country`, `region`, `state`, `city`, `postal_code`
-- Measures: `sales`, `quantity`, `discount`, `profit`, `profit_margin`, `shipping_days`
+---
 
-Indexes are added for date trends, customer drill-through, product analysis, regional slicing, profitability analysis, and shipping analysis.
+## 3️⃣ Execute SQL Analysis Files
 
-## KPI Calculations
+```sql id="r4"
+kpi_queries.sql
+sales_analysis.sql
+customer_analysis.sql
+profitability_analysis.sql
+advanced_queries.sql
+```
 
-- Total Sales: `SUM(sales)`
-- Total Profit: `SUM(profit)`
-- Profit Margin %: `SUM(profit) / SUM(sales) * 100`
-- Total Orders: `COUNT(DISTINCT order_id)`
-- Active Customers: `COUNT(DISTINCT customer_id)`
-- Average Order Value: `SUM(sales) / COUNT(DISTINCT order_id)`
-- Average Discount %: `AVG(discount) * 100`
-- Average Shipping Days: `AVG(shipping_days)`
-- Year-over-Year Sales %: current period sales compared with prior year sales using `LAG()`
+These scripts generate:
 
-## Business Insights
+* KPI metrics
+* Customer insights
+* Profitability analysis
+* Sales trends
+* Advanced SQL analytics
 
-- Discounting should be monitored closely because high discount bands can generate strong sales while reducing margin.
-- Loss-making products should be reviewed for pricing, promotion rules, supplier cost, or removal from campaigns.
-- Regional performance should be measured by both sales and profit because high revenue regions may not always produce the best margin.
-- Top customers are useful for retention and account management, but customer concentration should be tracked to reduce dependency risk.
-- Shipping modes can be compared by order volume, delivery speed, and profitability to identify fulfillment trade-offs.
-- Category and sub-category ranking helps separate growth categories from low-margin product groups.
+---
 
-## Power BI Dashboard Recommendations
+# 📈 Key Business Insights
 
-Suggested pages:
+* Technology generated the highest overall sales revenue.
+* West region delivered the highest profitability.
+* High discount levels negatively impacted profit margins.
+* A small number of products contributed significantly to total sales.
+* Monthly sales showed strong seasonal patterns.
 
-- Executive Overview: KPI cards, monthly sales trend, profit margin trend, regional sales map, category sales mix.
-- Sales Performance: monthly running totals, year-over-year sales, sub-category rankings, state leaderboard.
-- Customer Insights: top customers, segment performance, customer lifetime sales, customer concentration curve.
-- Profitability: loss-making products, discount impact, profitability segments, region-category margin heatmap.
-- Shipping & Operations: ship mode comparison, average shipping days, shipping speed rank, sales by shipping mode.
-- Product Portfolio: ABC classification, top products, high-sales low-margin products, category drill-through.
+---
 
-Recommended visuals:
+# 📌 SQL Concepts Used
 
-- KPI cards for total sales, profit, margin, orders, customers, and average order value.
-- Line chart for monthly sales and rolling 3-month sales.
-- Combo chart for sales and profit margin by month.
-- Matrix heatmap for region vs category profit margin.
-- Bar charts for top customers, top products, and loss-making products.
-- Map visual for state-level sales and profit.
-- Scatter plot for discount vs profit margin.
-- Decomposition tree for profit drivers by region, category, customer segment, and ship mode.
+* Aggregate Functions
+* Window Functions
+* CTEs (Common Table Expressions)
+* Ranking Functions
+* Views
+* CASE Statements
+* Joins
+* Date Functions
+* KPI Calculations
 
-## SQL Best Practices Used
+---
 
-- Load raw CSV into a staging table before inserting into production.
-- Use typed columns for reliable calculations.
-- Use `NULLIF()` to avoid divide-by-zero errors in margin metrics.
-- Add constraints for sales, quantity, discount, and shipping date quality.
-- Add indexes aligned with dashboard filters and joins.
-- Use window functions such as `RANK()`, `DENSE_RANK()`, `LAG()`, running totals, and rolling averages.
-- Create reusable views for Power BI instead of duplicating logic in reports.
+# 📌 Tableau Features Used
 
-## Advanced Analytics Ideas
+* Interactive Dashboards
+* Floating Layout Design
+* KPI Cards
+* Scatter Plots
+* Line Charts
+* Bar Charts
+* Dashboard Filters
+* Data Formatting
+* Executive Dashboard Styling
 
-- Build a star schema with dimension tables for date, customer, product, geography, and shipping.
-- Add Python forecasting for monthly sales using Prophet, ARIMA, or scikit-learn.
-- Create customer segmentation using RFM analysis.
-- Detect discount outliers and margin leakage using statistical thresholds.
-- Build a Power BI what-if parameter for discount reduction scenarios.
-- Add incremental refresh in Power BI using `order_date`.
-- Automate the CSV-to-MySQL pipeline with Python and scheduled jobs.
-- Add dbt-style SQL tests for row counts, uniqueness, accepted values, and non-null fields.
+---
+
+# 📷 Dashboard Preview
+
+*Add dashboard screenshot here*
+
+---
+
+# 🎯 Business Problems Solved
+
+✅ Sales trend analysis
+✅ Regional performance comparison
+✅ Profitability tracking
+✅ Discount impact analysis
+✅ Product performance analysis
+✅ Executive KPI monitoring
+✅ Interactive business reporting
+
+---
+
+# ⚡ Future Enhancements
+
+* Forecasting & Predictive Analytics
+* Customer Segmentation (RFM Analysis)
+* Real-Time Database Integration
+* Mobile Responsive Dashboard
+* AI-powered Insights
+
+---
+
+# 👨‍💻 Author
+
+## Venkatesh Kothamasu
+
+Aspiring Data Analyst & Business Intelligence Developer
+
+### Skills
+
+* SQL
+* Tableau
+* Python
+* MySQL
+* Data Visualization
+* Business Intelligence
+
+---
+
+# ⭐ Why This Project Stands Out
+
+✅ End-to-End Data Analytics Workflow
+✅ SQL + Tableau Integration
+✅ Real Business Intelligence Use Case
+✅ Interactive Executive Dashboard
+✅ Public Deployment on Tableau Public
+✅ Portfolio & Resume Ready
